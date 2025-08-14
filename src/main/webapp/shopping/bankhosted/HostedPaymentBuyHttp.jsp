@@ -31,7 +31,7 @@
 	String udf5 = null;
 	String tokenNo = null;
 	String tokenFlag = null;
-
+	String splitIndicator = null;
 	
 	String action = null;
  	String udf3 = null;
@@ -57,6 +57,7 @@
 			udf5 = request.getParameter("udf5");
 			tokenNo = request.getParameter("tokenNo");
 	
+			splitIndicator = request.getParameter("splitIndicator");
 			action = request.getParameter("action");
 			String amount = request.getParameter("amount");
 			try{
@@ -86,16 +87,36 @@
 			req.setTokenNo(tokenNo);
 			req.setTokenFlag(tokenFlag);
 			
-			req.setSplitPaymentIndicator("1");
-			SplitPaymentPayload splitPayLoad = new SplitPaymentPayload();
+			req.setSplitPaymentIndicator(splitIndicator);
 			
-			splitPayLoad.setAliasName("account001");
-			splitPayLoad.setNotes("Salary");
-			splitPayLoad.setType("1");
-			splitPayLoad.setReference(String.valueOf(Math.abs(rnd.nextInt())));
-			splitPayLoad.setSplitAmount("10");
-			
-			req.addSplitPaymentPayload(splitPayLoad);
+			String splitCountStr = request.getParameter("splitCount");
+			int splitCount = 0;
+			try {
+				splitCount = Integer.parseInt(splitCountStr);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			for (int i = 0; i < splitCount; i++) {
+				String aliasNameParam = request.getParameter("splitAliasName" + i);
+				String notesParam = request.getParameter("splitNotes" + i);
+				String typeParam = request.getParameter("splitType" + i);
+				String referenceParam = request.getParameter("splitReference" + i);
+				String amountParam = request.getParameter("splitAmount" + i);
+
+				// Optional: skip empty rows
+				if ((aliasNameParam != null && !aliasNameParam.trim().isEmpty())
+					|| (amountParam != null && !amountParam.trim().isEmpty())) {
+
+					SplitPaymentPayload payload = new SplitPaymentPayload();
+					payload.setAliasName(aliasNameParam);
+					payload.setNotes(notesParam);
+					payload.setType(typeParam);
+					payload.setReference(referenceParam);
+					payload.setSplitAmount(amountParam);
+					req.addSplitPaymentPayload(payload);
+				}
+			}
 			
 			if (tokenNo != null && tokenNo.isEmpty()) {
 				req.setTokenNo(tokenNo);

@@ -64,7 +64,7 @@
 		try {
 			properties = new Properties();
 		 	basePath = new File(pageContext.getServletContext().getRealPath("/"));
-		 	inputFile = new File(basePath+"/shopping/bankhosted/", "hostHttpres.properties");
+		 	inputFile = new File(basePath+"/shopping/merchanthostedvbvtcp/", "tranportalvbvtcpip.properties");
 			inStream = new FileInputStream(inputFile);
 			properties.load(inStream);
 			keyPath = properties.getProperty("keyPath");

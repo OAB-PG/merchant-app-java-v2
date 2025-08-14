@@ -138,17 +138,24 @@
 				req.setAlias(aliasName);
 				req.setKeyPath(keyPath);
 				req.setCurrencycode(currency);
+				
+				String proxyHost = "proxyhost";
+				Integer proxyport = 8080;
 				if(action.equals("INQUIRY")){
 					req.setAmt(amount);
 					req.setTransid(transid);
 					if(actionBy.equals("TRACKID")){
 						reply = new OabIpayConnection().processInquiryByTrackId(req);
+// 						reply = new OabIpayConnection(proxyHost, proxyport).processInquiryByTrackId(req);
 					} else if (actionBy.equals("PAYMENTID")){
 						reply = new OabIpayConnection().processInquiryByPaymentId(req);
+// 						reply = new OabIpayConnection(proxyHost, proxyport).processInquiryByPaymentId(req);
 					} else if (actionBy.equals("TRANID")){
 						reply = new OabIpayConnection().processInquiryByTranId(req);
+// 						reply = new OabIpayConnection(proxyHost, proxyport).processInquiryByTranId(req);
 					} else if (actionBy.equals("REFNO")){
 						reply = new OabIpayConnection().processInquiryByRefNo(req);
+// 						reply = new OabIpayConnection(proxyHost, proxyport).processInquiryByRefNo(req);
 					}
 				} else if (action.equals("VOID")){
 					req.setAmt(amount);
